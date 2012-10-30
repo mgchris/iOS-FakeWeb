@@ -7,10 +7,11 @@
 //
 
 #import "FakeWebResponder.h"
+#import "FakeWebDataFixture.h"
 
 @implementation FakeWebResponder
 
-@synthesize uri = _uri, method = _method, body = _body, status = _status,  statusMessage = _statusMessage;
+@synthesize uri = _uri, method = _method, body = _body, status = _status,  statusMessage = _statusMessage, dataPath = _dataPath, downloadDuration = _downloadDuration;
 
 -(id) initWithUri:(NSString *)uri method:(NSString *)method body:(NSString *)body status:(NSInteger)status statusMessage:(NSString *)statusMessage {
     self = [super init];
@@ -25,8 +26,18 @@
             _status = 200;
         if (!_statusMessage)
             _statusMessage = @"OK";
+        
+        _delay = 0.0f;
+        _downloadDuration = -1.0f;
     }
     return self;
+}
+
++ (FakeWebDataFixture*)buildFixtureForResponder:(FakeWebResponder*)responder {
+    FakeWebDataFixture* fixture = [[FakeWebDataFixture alloc] init];
+    fixture.downloadDuration = responder.downloadDuration;
+    fixture.readFromDataPath = responder.dataPath;
+    return [fixture autorelease];
 }
 
 @end

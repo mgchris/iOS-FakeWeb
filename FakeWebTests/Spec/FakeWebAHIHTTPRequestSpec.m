@@ -13,6 +13,8 @@
 #import "ASIHTTPRequest+FakeWeb.h"
 #import "ASIFormDataRequest.h"
 
+#import "AsyncTestObject.h"
+
 SPEC_BEGIN(FakeWebAHIHTTPRequestSpec)
 
 describe(@"ASIHTTPRequest+FakeWeb", ^{
@@ -159,8 +161,16 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
         });
     });
     
-    context(@"when async request", ^{
+    context(@"when async request with ASI", ^{
         context(@"registerUri", ^{
+            __block NSString* filePath;
+            __block NSData* textFileData;
+            
+            beforeEach(^{
+                filePath = [[NSBundle bundleWithIdentifier:@"net.dealforest.FakeWebTests"] pathForResource:@"FakeWebDataDocumentTest" ofType:@"txt"];
+                textFileData = [NSData dataWithContentsOfFile:filePath];
+            });
+            
             it(@"normal process", ^{
                 [FakeWeb registerUri:[url absoluteString] method:@"GET" body:@"hoge"];
                 
@@ -168,6 +178,175 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
                 request = [ASIHTTPRequest requestWithURL:url];
                 [request startAsynchronous];
                 [[expectFutureValue([request responseString]) shouldEventually] equal:@"hoge"];
+            });
+            
+            it(@"error when Synchronous", ^{
+                NSError* error = [NSError errorWithDomain:@"This error is part of the test" code:500 userInfo:nil];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" body:@"Error Test" staus:500 statusMessage:nil withError:error withResponseDelay:0.3];
+                
+                ASIHTTPRequest *request;
+                request = [ASIHTTPRequest requestWithURL:url];
+                [request startSynchronous];
+                
+                NSError* requestError = [request error];
+                [request shouldNotBeNil];
+                [[requestError shouldEventually] equal:error];
+                [[theValue([requestError code]) should] equal:theValue(500)];
+                [[[requestError domain] should] equal:@"This error is part of the test"];
+            });
+            
+            it(@"return data", ^{
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                
+                ASIHTTPRequest *request;
+                request = [ASIHTTPRequest requestWithURL:url];
+                [request startAsynchronous];
+                [[expectFutureValue([request responseData]) shouldEventually] beNonNil];
+                [[[request responseData] should] equal:textFileData];
+            });
+            
+            it(@"return data", ^{
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                
+                ASIHTTPRequest *request;
+                request = [ASIHTTPRequest requestWithURL:url];
+                [request startAsynchronous];
+                [[expectFutureValue([request responseData]) shouldEventually] beNonNil];
+                [[[request responseData] should] equal:textFileData];
+            });
+            
+            it(@"finish callback", ^{
+                
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                
+                AsyncTestObject* handler = [[[AsyncTestObject alloc] init] autorelease];
+                
+                ASIHTTPRequest *request;
+                request = [ASIHTTPRequest requestWithURL:url];
+                
+                [request setDelegate:handler];
+                [request setDidFinishSelector:@selector(finishedWithASIHTTPRequest:)];
+                
+                [request startAsynchronous];
+                
+                [[expectFutureValue( theValue(handler.didFinish) ) shouldEventually] beTrue];
+                [[handler.callbackRequest shouldNot] beNil];
+                [[handler.callbackRequest should] equal:request];
+            });
+            
+            it(@"fail callback", ^{
+                NSError* error = [NSError errorWithDomain:@"Error when testing callback" code:500 userInfo:nil];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" body:nil staus:404 statusMessage:nil withError:error withResponseDelay:0.3];
+                
+                AsyncTestObject* handler = [[[AsyncTestObject alloc] init] autorelease];
+                ASIHTTPRequest *request;
+                request = [ASIHTTPRequest requestWithURL:url];
+                [request setDelegate:handler];
+                [request setDidFailSelector:@selector(failedWithASIHTTPRequest:)];
+                [request startAsynchronous];
+                
+                [[expectFutureValue( theValue(handler.didFail) ) shouldEventually] beTrue];
+                [[handler.callbackRequest shouldNot] beNil];
+                
+                [[[handler.callbackRequest error] should] equal:error];
+                [[theValue([[handler.callbackRequest error] code]) should] equal:theValue(500)];
+                [[[[handler.callbackRequest error] domain] should] equal:@"Error when testing callback"];
+            });
+            
+            it(@"completion block", ^{
+                
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                
+                AsyncTestObject* tester = [AsyncTestObject mock];
+                
+                ASIHTTPRequest *request;
+                request = [ASIHTTPRequest requestWithURL:url];
+                [request setCompletionBlock:^{
+                    [tester description];
+                }];
+                
+                [request startAsynchronous];
+                
+                [[[tester shouldEventually] receive] description];
+            });
+            
+            it(@"change registerURI after setting it", ^{
+                
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                AsyncTestObject* sucessfulHandler = [[[AsyncTestObject alloc] init] autorelease];
+                
+                ASIHTTPRequest *sucessfulRequest;
+                sucessfulRequest = [ASIHTTPRequest requestWithURL:url];
+                
+                [sucessfulRequest setDelegate:sucessfulHandler];
+                [sucessfulRequest setDidFinishSelector:@selector(finishedWithASIHTTPRequest:)];
+                
+                [sucessfulRequest startAsynchronous];
+                
+                [[expectFutureValue( theValue(sucessfulHandler.didFinish) ) shouldEventually] beTrue];
+                [[sucessfulHandler.callbackRequest shouldNot] beNil];
+                [[sucessfulHandler.callbackRequest should] equal:sucessfulRequest];
+                [[theValue( sucessfulHandler.callbackRequest.responseStatusCode ) should] equal:theValue(200)];
+                
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:500 withResponseDelay:0.3 withFileDataPath:filePath];
+                AsyncTestObject* failedHandler = [[[AsyncTestObject alloc] init] autorelease];
+                
+                ASIHTTPRequest *failedRequest;
+                failedRequest = [ASIHTTPRequest requestWithURL:url];
+                
+                [failedRequest setDelegate:failedHandler];
+                [failedRequest setDidFinishSelector:@selector(finishedWithASIHTTPRequest:)];
+                
+                [failedRequest startAsynchronous];
+                
+                [[expectFutureValue( theValue(failedHandler.didFinish) ) shouldEventually] beTrue];
+                [[failedHandler.callbackRequest shouldNot] beNil];
+                [[failedHandler.callbackRequest should] equal:failedRequest];
+                [[theValue( failedHandler.callbackRequest.responseStatusCode ) should] equal:theValue(500)];
+                
+            });
+            
+            context(@" Using data fixture",^{
+                __block AsyncTestObject* tester = nil;
+                __block ASIHTTPRequest* request = nil;
+                __block NSString* downloadPath = nil;
+                
+                beforeEach(^{
+                    tester = [[[AsyncTestObject alloc] init] autorelease];
+                    request = [ASIHTTPRequest requestWithURL:url];
+                    downloadPath = [[[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject] path];
+                });
+                
+                it(@"Progressive download", ^{
+                    [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withFileDataPath:filePath useDataFixture:YES withDownloadDuration:3.0];
+                    
+                    [request setDownloadProgressDelegate:tester];
+                    
+                    [request startAsynchronous];
+                    
+                    [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(1.5)] beGreaterThanOrEqualTo:theValue(0.25f)];
+                    [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(2.0)] beGreaterThanOrEqualTo:theValue(0.50f)];
+                    [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(3.5)] beGreaterThanOrEqualTo:theValue(1.0f)];
+                    [[[request responseData] should] equal:textFileData];
+                });
+                
+                it(@"write to path", ^{
+                    [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withFileDataPath:filePath useDataFixture:YES withDownloadDuration:1.0];
+                    
+                    NSString* outFile = [NSString stringWithFormat:@"%@outFile.txt", downloadPath];
+
+                    [request setDownloadDestinationPath:outFile];   
+                    [request setDownloadProgressDelegate:tester];
+                    
+                    [request startAsynchronous];
+                    
+                    [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(1.5)] beGreaterThanOrEqualTo:theValue(1.0f)]; // wait until done.
+                    
+                    NSData* writtenData = [NSData dataWithContentsOfFile:outFile];
+                    [[writtenData should] equal:textFileData];
+                    
+                    [[NSFileManager defaultManager] removeItemAtPath:outFile error:nil];
+                });
             });
         });
     });

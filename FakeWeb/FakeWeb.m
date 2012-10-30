@@ -14,6 +14,7 @@
 NSString * const FakeWebRequestKey = @"FakeWebRequestKey";
 NSString * const FakeWebNotAllowedNetConnetException = @"FakeWebNotAllowedNetConnetException";
 
+static NSMutableDictionary* responderRequestMatcher; // wanted a way of connecting a request to a responder
 static NSMutableDictionary *uriMap;
 static NSMutableDictionary *passthroughUriMap;
 static BOOL allowNetConnect;
@@ -28,6 +29,8 @@ static FakeWebResponder *matchingResponder;
     passthroughUriMap = [NSMutableDictionary new];
     allowNetConnect = autoCleanup = TRUE;
     matchingResponder = nil;
+    
+    responderRequestMatcher = [[NSMutableDictionary alloc] init];
 }
 
 #pragma mark -
@@ -46,9 +49,9 @@ static FakeWebResponder *matchingResponder;
         id status = [response objectForKey:@"status"];
         if ([status isKindOfClass:[NSString class]] || [status isKindOfClass:[NSNumber class]])
             statusCode = [(NSString *)status integerValue];
-    
-        FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri 
-                                                                     method:method 
+        
+        FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri
+                                                                     method:method
                                                                        body:body
                                                                      status:statusCode
                                                               statusMessage:[response objectForKey:@"statusMessage"]];
@@ -68,7 +71,7 @@ static FakeWebResponder *matchingResponder;
     [self registerUri:uri method:method body:body status:status statusMessage:nil];
 }
 
-+ (void)registerUri:(NSString*)uri method:(NSString*)method body:(NSString*)body 
++ (void)registerUri:(NSString*)uri method:(NSString*)method body:(NSString*)body
 {
     [self registerUri:uri method:method body:body status:200 statusMessage:nil];
 }
@@ -78,21 +81,9 @@ static FakeWebResponder *matchingResponder;
     if (!method) return;
     
     FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:body status:status statusMessage:statusMessage];
-
-    NSArray *methods = [self convertToMethodList:method];
-    for (NSString *method_ in methods)
-    {
-        NSString *key = [self keyForUri:uri method:method_];
-        NSMutableArray *responders = (NSMutableArray *)[uriMap objectForKey:key];
-        if (responders)
-        {
-            [responders removeAllObjects];
-            [responders addObject:responder];
-        }
-        else 
-            responders = [NSMutableArray arrayWithObjects:responder, nil];
-        [uriMap setObject:responders forKey:key];
-    }
+    
+    [self addResponserToURIMap:responder registerUri:uri method:method body:body staus:status statusMessage:statusMessage];
+    [responder release];
 }
 
 +(void) registerPassthroughUri:(NSString *)uri
@@ -100,7 +91,7 @@ static FakeWebResponder *matchingResponder;
     [self registerPassthroughUri:uri method:@"ANY"];
 }
 
-+ (void)registerPassthroughUri:(NSString*)uri method:(NSString*)method 
++ (void)registerPassthroughUri:(NSString*)uri method:(NSString*)method
 {
     NSArray *methods = [self convertToMethodList:method];
     for (NSString *method_ in methods)
@@ -110,15 +101,63 @@ static FakeWebResponder *matchingResponder;
     }
 }
 
+#pragma mark - Asynchronous
++(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage withError:(NSError*)error withResponseDelay:(NSTimeInterval)delay
+{
+    if (!method) return;
+    
+    FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:body status:status statusMessage:statusMessage];
+    responder.error = error;
+    
+    [self addResponserToURIMap:responder registerUri:uri method:method body:body staus:status statusMessage:statusMessage];
+    [responder release];
+}
+
++(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage withResponseDelay:(NSTimeInterval)delay
+{
+    if (!method) return;
+    
+    FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:body status:status statusMessage:statusMessage];
+    responder.delay = delay;
+    
+    [self addResponserToURIMap:responder registerUri:uri method:method body:body staus:status statusMessage:statusMessage];
+    [responder release];
+}
+
++(void) registerUri:(NSString *)uri method:(NSString *)method staus:(NSInteger)status withResponseDelay:(NSTimeInterval)delay withFileDataPath:(NSString*)dataPath;
+{
+    if (!method) return;
+    
+    FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:nil status:status statusMessage:nil];
+    responder.dataPath = dataPath;
+    responder.delay = delay;
+    
+    [self addResponserToURIMap:responder registerUri:uri method:method body:nil staus:status statusMessage:nil];
+    [responder release];
+}
+
++(void) registerUri:(NSString *)uri method:(NSString *)method staus:(NSInteger)status withFileDataPath:(NSString*)dataPath useDataFixture:(BOOL)useFixture withDownloadDuration:(NSTimeInterval)duration
+{
+    if (!method) return;
+    
+    FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:nil status:status statusMessage:nil];
+    responder.dataPath = dataPath;
+    responder.downloadDuration = duration;
+    responder.useDataFixture = useFixture;
+    
+    [self addResponserToURIMap:responder registerUri:uri method:method body:nil staus:status statusMessage:nil];
+    [responder release];
+}
+
 #pragma mark -
 #pragma mark check method
 
-+ (BOOL)registeredUri:(NSString*)uri 
++ (BOOL)registeredUri:(NSString*)uri
 {
     return [self registeredUri:uri method:@"ANY"];
 }
 
-+ (BOOL)registeredUri:(NSString*)uri method:(NSString*)method 
++ (BOOL)registeredUri:(NSString*)uri method:(NSString*)method
 {
     NSArray *methods = [self convertToMethodList:method];
     for (NSString *method_ in methods)
@@ -130,7 +169,7 @@ static FakeWebResponder *matchingResponder;
     return NO;
 }
 
-+ (BOOL)registeredPassthroughUri:(NSString*)uri 
++ (BOOL)registeredPassthroughUri:(NSString*)uri
 {
     return [self registeredPassthroughUri:uri method:@"ANY"];
 }
@@ -175,6 +214,7 @@ static FakeWebResponder *matchingResponder;
 {
     [uriMap removeAllObjects];
     [passthroughUriMap removeAllObjects];
+    [responderRequestMatcher removeAllObjects];
 }
 
 + (FakeWebResponder *)responderFor:(NSString *)uri method:(NSString *)method
@@ -184,7 +224,7 @@ static FakeWebResponder *matchingResponder;
         [self raiseNetConnectException:uri method:method];
         return nil;
     }
-
+    
     FakeWebResponder *responder;
     responder = [self uriMapMatches:uriMap uri:uri method:method type:@"URI"];
     if (responder) return responder;
@@ -214,27 +254,27 @@ static FakeWebResponder *matchingResponder;
 {
     NSString *key = [self keyForUri:uri method:method];
     
-    if ([type isEqualToString:@"URI"]) 
+    if ([type isEqualToString:@"URI"])
     {
         matchingResponder = [self matchingFirstResponser:map key:key];
         return matchingResponder;
     }
     else {
         NSArray *methods = [self convertToMethodList:method];
-        for (NSString *mapKey in [map allKeys]) 
+        for (NSString *mapKey in [map allKeys])
         {
             NSString *uri_ = [[mapKey componentsSeparatedByString:@" "] objectAtIndex:1];
             for (NSString *method_ in methods)
             {
                 NSString *key_ = [self keyForUri:uri_ method:method];
                 NSError *error;
-                NSRegularExpression *regex = [NSRegularExpression 
+                NSRegularExpression *regex = [NSRegularExpression
                                               regularExpressionWithPattern:key_
-                                              options:NSRegularExpressionCaseInsensitive 
+                                              options:NSRegularExpressionCaseInsensitive
                                               error:&error];
                 if (error) return nil;
                 
-                if ([regex numberOfMatchesInString:key options:0 range:NSMakeRange(0, [key length])] > 0) 
+                if ([regex numberOfMatchesInString:key options:0 range:NSMakeRange(0, [key length])] > 0)
                 {
                     matchingResponder = [self matchingFirstResponser:map key:key_];
                     return matchingResponder;
@@ -261,7 +301,7 @@ static FakeWebResponder *matchingResponder;
     }
 }
 
-+(NSArray *) convertToMethodList:(NSString *)method 
++(NSArray *) convertToMethodList:(NSString *)method
 {
     if (!method || [method isKindOfClass:[NSNull class]])
         return nil;
@@ -291,6 +331,63 @@ static FakeWebResponder *matchingResponder;
     return uri;
 }
 
+
++ (void)addResponserToURIMap:(FakeWebResponder*)responder registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage
+{
+    NSArray *methods = [FakeWeb convertToMethodList:method];
+    for (NSString *method_ in methods)
+    {
+        NSString *key = [FakeWeb keyForUri:uri method:method_];
+        NSMutableArray *responders = (NSMutableArray *)[uriMap objectForKey:key];
+        if (responders)
+        {
+            [responders removeAllObjects];
+            [responders addObject:responder];
+        }
+        else
+        {
+            responders = [NSMutableArray arrayWithObjects:responder, nil];
+        }
+        [uriMap setObject:responders forKey:key];
+    }
+}
+
+
+#pragma mark -
++(FakeWebResponder *) matchingResponderForRequest:(id)request {
+    FakeWebResponder* responder = nil;
+    
+    if( request ) {
+        NSString* key = [NSString stringWithFormat:@"%p", request];
+        responder = [responderRequestMatcher objectForKey:key];
+    }
+    
+    return responder;
+}
+
++ (void)setMatchingResponder:(FakeWebResponder *)responder forRequest:(id)request {
+    if( responder && request ) {
+        NSString* key = [NSString stringWithFormat:@"%p", request];
+        [responderRequestMatcher setObject:responder forKey:key];
+    }
+}
+
++ (void)removeMatchingResponderForRequest:(id)request {
+    if( request ) {
+        NSString* key = [NSString stringWithFormat:@"%p", request];
+        [responderRequestMatcher removeObjectForKey:key];
+    }
+}
+
++ (void)cleanUpForRequest:(id)request {
+    if( request ) {
+        [FakeWeb removeMatchingResponderForRequest:request];
+    }
+}
+
+
+#pragma mark -
+
 /*
  * see http://stackoverflow.com/questions/1637604/method-swizzle-on-iphone-device
  */
@@ -299,7 +396,7 @@ void Swizzle(Class c, SEL orig, SEL new)
 {
     Method origMethod = class_getInstanceMethod(c, orig);
     Method newMethod = class_getInstanceMethod(c, new);
-    if(class_addMethod(c, orig, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) 
+    if(class_addMethod(c, orig, method_getImplementation(newMethod), method_getTypeEncoding(newMethod)))
         class_replaceMethod(c, new, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
     else
         method_exchangeImplementations(origMethod, newMethod);
@@ -309,6 +406,5 @@ void SwizzleClassMethod(Class c, SEL orig, SEL new)
 {
     Swizzle(object_getClass((id)c), orig, new);
 }
-
 
 @end

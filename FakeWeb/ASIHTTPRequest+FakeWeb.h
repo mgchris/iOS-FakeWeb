@@ -7,7 +7,8 @@
 //
 
 #import "ASIHTTPRequest.h"
+#import "FakeWebDataFixture.h"
 
-@interface ASIHTTPRequest (FakeWeb)
+@interface ASIHTTPRequest (FakeWeb) <FakeWebDataTransferDelegate>
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "FakeWeb.h"
-#import <objc/runtime.h> 
+#import <objc/runtime.h>
 #import <objc/message.h>
 
 @interface FakeWeb (private)
@@ -29,6 +29,11 @@
 +(NSString *) normalizeUri:(NSString *)uri;
 
 +(NSString *) sortQuery:(NSString *)uri;
+
+
++ (FakeWebResponder *)matchingResponderForRequest:(id)request;
++ (void)setMatchingResponder:(FakeWebResponder *)responder forRequest:(id)request;
++ (void)removeMatchingResponderForRequest:(id)request;
 
 /*
  * see http://stackoverflow.com/questions/1637604/method-swizzle-on-iphone-device
