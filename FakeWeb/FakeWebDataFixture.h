@@ -34,7 +34,7 @@
 @end
 
 @protocol FakeWebDataTransferDelegate <NSObject>
-
+@optional
 - (void)dataTransferStarted:(FakeWebDataFixture *)transfer;
 - (void)dataTransfer:(FakeWebDataFixture*)transfer dataChunk:(NSData*)data;
 - (void)dataTransferDone:(FakeWebDataFixture *)transfer;
