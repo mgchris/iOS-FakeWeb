@@ -40,8 +40,8 @@
  *     http://stackoverflow.com/questions/4383567/cant-swizzle-class-methods
  */
 
-void Swizzle(Class c, SEL orig, SEL new);
+void Swizzle(Class c, SEL origSel, SEL newSel);
 
-void SwizzleClassMethod(Class c, SEL orig, SEL new);
+void SwizzleClassMethod(Class c, SEL origSel, SEL newSel);
 
 @end

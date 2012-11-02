@@ -11,7 +11,6 @@
 
 @property (nonatomic, assign) id <FakeWebDataTransferDelegate> delegate;
 
-// NOTE: the file used should not be to long or else the math will become incorrect.
 @property (nonatomic, strong) NSString* readFromDataPath;
 
 @property (nonatomic, assign) NSTimeInterval downloadDuration;

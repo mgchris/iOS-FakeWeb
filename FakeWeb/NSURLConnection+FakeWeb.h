@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+@class FakeWebResponder;
 
 @interface NSURLConnection (FakeWeb)
+
++ (NSHTTPURLResponse *)createDummyResponse:(NSURLRequest *)request responder:(FakeWebResponder *)responder;
 
 @end

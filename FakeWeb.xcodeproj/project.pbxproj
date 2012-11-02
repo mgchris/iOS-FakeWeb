@@ -11,8 +11,22 @@
 		543A8DED163B55D500B44557 /* FakeWebDataFixture.m in Sources */ = {isa = PBXBuildFile; fileRef = 543A8DEB163B55D500B44557 /* FakeWebDataFixture.m */; };
 		543A8DF0163B564C00B44557 /* FakeWebDataFixtureSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 543A8DEF163B564C00B44557 /* FakeWebDataFixtureSpec.m */; };
 		543A8DF1163B56BC00B44557 /* ASIHTTPRequest+FakeWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E52692215615F0E006AD80E /* ASIHTTPRequest+FakeWeb.m */; };
+		54ABF45B1642D35B00EE2575 /* FakeWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EBFD90514E192450042AC70 /* FakeWeb.m */; };
+		54ABF45C1642D35B00EE2575 /* FakeWebResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EBFD97E14E827500042AC70 /* FakeWebResponder.m */; };
+		54ABF45D1642D35B00EE2575 /* NSURLConnection+FakeWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EE984231598724300E500EE /* NSURLConnection+FakeWeb.m */; };
+		54ABF45E1642D35B00EE2575 /* FakeWebDataFixture.m in Sources */ = {isa = PBXBuildFile; fileRef = 543A8DEB163B55D500B44557 /* FakeWebDataFixture.m */; };
+		54ABF4601642D35B00EE2575 /* NSURLConnection+FakeWeb_RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 54D7F2BD1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.m */; };
+		54ABF4621642D35B00EE2575 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EBFD8FF14E192450042AC70 /* Foundation.framework */; };
+		54ABF4641642D35B00EE2575 /* FakeWebResponder.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EBFD97D14E827500042AC70 /* FakeWebResponder.h */; };
+		54ABF4651642D35B00EE2575 /* FakeWeb+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E76D16C1556B7F200D02664 /* FakeWeb+Private.h */; };
+		54ABF4661642D35B00EE2575 /* ASIHTTPRequest+FakeWeb.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E52692115615F0E006AD80E /* ASIHTTPRequest+FakeWeb.h */; };
+		54ABF4671642D35B00EE2575 /* NSURLConnection+FakeWeb.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EE984221598724300E500EE /* NSURLConnection+FakeWeb.h */; };
+		54ABF4681642D35B00EE2575 /* FakeWebDataFixture.h in Headers */ = {isa = PBXBuildFile; fileRef = 543A8DEA163B55D500B44557 /* FakeWebDataFixture.h */; };
+		54ABF4691642D35B00EE2575 /* NSURLConnection+FakeWeb_RestKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 54D7F2BC1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.h */; };
 		54BF9D9F163869FF00DD337E /* AsyncTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BF9D9E163869FF00DD337E /* AsyncTestObject.m */; };
 		54BF9DA11638701600DD337E /* FakeWebDataDocumentTest.txt in Resources */ = {isa = PBXBuildFile; fileRef = 54BF9DA01638701600DD337E /* FakeWebDataDocumentTest.txt */; };
+		54D7F2BE1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 54D7F2BC1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.h */; };
+		54D7F2BF1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 54D7F2BD1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.m */; };
 		5E139258159A184A00777D95 /* FakeWebTestNSURLConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E139257159A184A00777D95 /* FakeWebTestNSURLConnectionViewController.m */; };
 		5E1501011561619500231102 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EBFD93414E1957A0042AC70 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5E1501041561619500231102 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EBFD93714E1957A0042AC70 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -88,9 +102,12 @@
 		543A8DEA163B55D500B44557 /* FakeWebDataFixture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeWebDataFixture.h; sourceTree = "<group>"; };
 		543A8DEB163B55D500B44557 /* FakeWebDataFixture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeWebDataFixture.m; sourceTree = "<group>"; };
 		543A8DEF163B564C00B44557 /* FakeWebDataFixtureSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FakeWebDataFixtureSpec.m; path = Spec/FakeWebDataFixtureSpec.m; sourceTree = "<group>"; };
+		54ABF46D1642D35B00EE2575 /* libFakeWebRestKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFakeWebRestKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		54BF9D9D163869FF00DD337E /* AsyncTestObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AsyncTestObject.h; path = mock/AsyncTestObject.h; sourceTree = "<group>"; };
 		54BF9D9E163869FF00DD337E /* AsyncTestObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncTestObject.m; path = mock/AsyncTestObject.m; sourceTree = "<group>"; };
 		54BF9DA01638701600DD337E /* FakeWebDataDocumentTest.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FakeWebDataDocumentTest.txt; sourceTree = "<group>"; };
+		54D7F2BC1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+FakeWeb_RestKit.h"; sourceTree = "<group>"; };
+		54D7F2BD1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+FakeWeb_RestKit.m"; sourceTree = "<group>"; };
 		5E139256159A184A00777D95 /* FakeWebTestNSURLConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FakeWebTestNSURLConnectionViewController.h; path = mock/FakeWebTestNSURLConnectionViewController.h; sourceTree = "<group>"; };
 		5E139257159A184A00777D95 /* FakeWebTestNSURLConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FakeWebTestNSURLConnectionViewController.m; path = mock/FakeWebTestNSURLConnectionViewController.m; sourceTree = "<group>"; };
 		5E52692115615F0E006AD80E /* ASIHTTPRequest+FakeWeb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ASIHTTPRequest+FakeWeb.h"; sourceTree = "<group>"; };
@@ -143,6 +160,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		54ABF4611642D35B00EE2575 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54ABF4621642D35B00EE2575 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5EBFD8F914E192450042AC70 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -189,6 +214,8 @@
 				5E52692215615F0E006AD80E /* ASIHTTPRequest+FakeWeb.m */,
 				5EE984221598724300E500EE /* NSURLConnection+FakeWeb.h */,
 				5EE984231598724300E500EE /* NSURLConnection+FakeWeb.m */,
+				54D7F2BC1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.h */,
+				54D7F2BD1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.m */,
 			);
 			name = category;
 			sourceTree = "<group>";
@@ -208,6 +235,7 @@
 			children = (
 				5EBFD8FC14E192450042AC70 /* libFakeWeb.a */,
 				5EBFD90C14E192450042AC70 /* FakeWebTests.octest */,
+				54ABF46D1642D35B00EE2575 /* libFakeWebRestKit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -342,6 +370,19 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		54ABF4631642D35B00EE2575 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54ABF4641642D35B00EE2575 /* FakeWebResponder.h in Headers */,
+				54ABF4651642D35B00EE2575 /* FakeWeb+Private.h in Headers */,
+				54ABF4661642D35B00EE2575 /* ASIHTTPRequest+FakeWeb.h in Headers */,
+				54ABF4671642D35B00EE2575 /* NSURLConnection+FakeWeb.h in Headers */,
+				54ABF4681642D35B00EE2575 /* FakeWebDataFixture.h in Headers */,
+				54ABF4691642D35B00EE2575 /* NSURLConnection+FakeWeb_RestKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5EBFD8FA14E192450042AC70 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -351,12 +392,30 @@
 				5E52692315615F0E006AD80E /* ASIHTTPRequest+FakeWeb.h in Headers */,
 				5EE984241598724300E500EE /* NSURLConnection+FakeWeb.h in Headers */,
 				543A8DEC163B55D500B44557 /* FakeWebDataFixture.h in Headers */,
+				54D7F2BE1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		54ABF4591642D35B00EE2575 /* FakeWebRestKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54ABF46A1642D35B00EE2575 /* Build configuration list for PBXNativeTarget "FakeWebRestKit" */;
+			buildPhases = (
+				54ABF45A1642D35B00EE2575 /* Sources */,
+				54ABF4611642D35B00EE2575 /* Frameworks */,
+				54ABF4631642D35B00EE2575 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FakeWebRestKit;
+			productName = FakeWeb;
+			productReference = 54ABF46D1642D35B00EE2575 /* libFakeWebRestKit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		5EBFD8FB14E192450042AC70 /* FakeWeb */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5EBFD92014E192450042AC70 /* Build configuration list for PBXNativeTarget "FakeWeb" */;
@@ -423,6 +482,7 @@
 			targets = (
 				5EBFD8FB14E192450042AC70 /* FakeWeb */,
 				5EBFD90B14E192450042AC70 /* FakeWebTests */,
+				54ABF4591642D35B00EE2575 /* FakeWebRestKit */,
 			);
 		};
 /* End PBXProject section */
@@ -479,6 +539,18 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		54ABF45A1642D35B00EE2575 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54ABF45B1642D35B00EE2575 /* FakeWeb.m in Sources */,
+				54ABF45C1642D35B00EE2575 /* FakeWebResponder.m in Sources */,
+				54ABF45D1642D35B00EE2575 /* NSURLConnection+FakeWeb.m in Sources */,
+				54ABF45E1642D35B00EE2575 /* FakeWebDataFixture.m in Sources */,
+				54ABF4601642D35B00EE2575 /* NSURLConnection+FakeWeb_RestKit.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5EBFD8F814E192450042AC70 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -488,6 +560,7 @@
 				980E36A515DBAA8A00B036FC /* NSURLConnection+FakeWeb.m in Sources */,
 				543A8DED163B55D500B44557 /* FakeWebDataFixture.m in Sources */,
 				543A8DF1163B56BC00B44557 /* ASIHTTPRequest+FakeWeb.m in Sources */,
+				54D7F2BF1641ED8D00306899 /* NSURLConnection+FakeWeb_RestKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,6 +602,30 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		54ABF46B1642D35B00EE2575 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/FakeWeb.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FakeWeb/FakeWeb-Prefix.pch";
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = FakeWebRestKit;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		54ABF46C1642D35B00EE2575 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/FakeWeb.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FakeWeb/FakeWeb-Prefix.pch";
+				OTHER_LDFLAGS = "-all_load";
+				PRODUCT_NAME = FakeWebRestKit;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		5EBFD91E14E192450042AC70 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -636,6 +733,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		54ABF46A1642D35B00EE2575 /* Build configuration list for PBXNativeTarget "FakeWebRestKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54ABF46B1642D35B00EE2575 /* Debug */,
+				54ABF46C1642D35B00EE2575 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5EBFD8F614E192450042AC70 /* Build configuration list for PBXProject "FakeWeb" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -54,9 +54,20 @@
 
 + (NSHTTPURLResponse *)createDummyResponse:(NSURLRequest *)request responder:(FakeWebResponder *)responder
 {
+    
+    NSUInteger length = 0;
+    if( responder.dataPath )
+    {
+        length = [[[NSFileManager defaultManager] attributesOfItemAtPath:responder.dataPath error:nil][NSFileSize] unsignedIntegerValue];
+    }
+    else
+    {
+        length = [[responder body] length];
+    }
+    
     NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
                              @"text/plain; charset=UTF-8", @"Content-Type",
-                             [NSString stringWithFormat:@"%d", [[responder body] length]], @"Content-Length",
+                             [NSString stringWithFormat:@"%d", length], @"Content-Length",
                              nil];
     return [[NSHTTPURLResponse alloc] initWithURL:[request URL]
                                        statusCode:[responder status]
