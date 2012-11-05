@@ -23,6 +23,9 @@
 @property (nonatomic) CGFloat progress;
 @property (nonatomic, strong) NSMutableData* progressData;
 
+@property (nonatomic, strong) NSError* error;
+@property (nonatomic, strong) id request;
+
 + (void)createAsyncTester:(AsyncTestObject**)tester createASIRequest:(ASIHTTPRequest**)request withURL:(NSURL*)url;
 
 - (void)finishedWithASIHTTPRequest:(ASIHTTPRequest*)request;

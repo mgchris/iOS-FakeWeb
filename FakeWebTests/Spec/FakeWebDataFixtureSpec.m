@@ -69,16 +69,16 @@ describe(@"FakeWebDataFixture", ^{
         });
         
         it(@"should handle progress downloading", ^{
-            fixture.downloadDuration = 5.0;                    
+            fixture.downloadDuration = 4.0;
             fixture.processEveryMS = 250ull * NSEC_PER_MSEC;   
             fixture.readFromDataPath = readFilePath;
             fixture.delegate = tester;
             
             [fixture start];
             
-            [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(2.0)] beGreaterThanOrEqualTo:theValue(0.25f)];
-            [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(2.5)] beGreaterThanOrEqualTo:theValue(0.50f)];
-            [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(4.5)] beGreaterThanOrEqualTo:theValue(0.75f)];
+            [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(1.0)] beGreaterThanOrEqualTo:theValue(0.25f)];
+            [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(2.0)] beGreaterThanOrEqualTo:theValue(0.50f)];
+            [[expectFutureValue( theValue(tester.progress) ) shouldEventuallyBeforeTimingOutAfter(3.5)] beGreaterThanOrEqualTo:theValue(0.75f)];
 
             [[expectFutureValue( theValue(fixture.isProcessing) ) shouldEventuallyBeforeTimingOutAfter(2.0)] equal:theValue(NO)]; // Needs a bit more then a second.
         });

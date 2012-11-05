@@ -4,3 +4,6 @@
 [submodule "externals/asi-http-request"]
 	path = externals/asi-http-request
 	url = http://github.com/pokeb/asi-http-request.git
+[submodule "externals/RestKit"]
+	path = externals/RestKit
+	url = https://github.com/RestKit/RestKit.git
