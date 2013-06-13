@@ -82,7 +82,7 @@ static FakeWebResponder *matchingResponder;
     
     FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:body status:status statusMessage:statusMessage];
     
-    [self addResponserToURIMap:responder registerUri:uri method:method body:body staus:status statusMessage:statusMessage];
+    [self addResponserToURIMap:responder registerUri:uri method:method body:body status:status statusMessage:statusMessage];
     [responder release];
 }
 
@@ -102,29 +102,29 @@ static FakeWebResponder *matchingResponder;
 }
 
 #pragma mark - Asynchronous
-+(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage withError:(NSError*)error withResponseDelay:(NSTimeInterval)delay
++(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body status:(NSInteger)status statusMessage:(NSString *)statusMessage withError:(NSError*)error withResponseDelay:(NSTimeInterval)delay
 {
     if (!method) return;
     
     FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:body status:status statusMessage:statusMessage];
     responder.error = error;
     
-    [self addResponserToURIMap:responder registerUri:uri method:method body:body staus:status statusMessage:statusMessage];
+    [self addResponserToURIMap:responder registerUri:uri method:method body:body status:status statusMessage:statusMessage];
     [responder release];
 }
 
-+(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage withResponseDelay:(NSTimeInterval)delay
++(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body status:(NSInteger)status statusMessage:(NSString *)statusMessage withResponseDelay:(NSTimeInterval)delay
 {
     if (!method) return;
     
     FakeWebResponder *responder = [[FakeWebResponder alloc] initWithUri:uri method:method body:body status:status statusMessage:statusMessage];
     responder.delay = delay;
     
-    [self addResponserToURIMap:responder registerUri:uri method:method body:body staus:status statusMessage:statusMessage];
+    [self addResponserToURIMap:responder registerUri:uri method:method body:body status:status statusMessage:statusMessage];
     [responder release];
 }
 
-+(void) registerUri:(NSString *)uri method:(NSString *)method staus:(NSInteger)status withResponseDelay:(NSTimeInterval)delay withFileDataPath:(NSString*)dataPath;
++(void) registerUri:(NSString *)uri method:(NSString *)method status:(NSInteger)status withResponseDelay:(NSTimeInterval)delay withFileDataPath:(NSString*)dataPath;
 {
     if (!method) return;
     
@@ -132,11 +132,11 @@ static FakeWebResponder *matchingResponder;
     responder.dataPath = dataPath;
     responder.delay = delay;
     
-    [self addResponserToURIMap:responder registerUri:uri method:method body:nil staus:status statusMessage:nil];
+    [self addResponserToURIMap:responder registerUri:uri method:method body:nil status:status statusMessage:nil];
     [responder release];
 }
 
-+(void) registerUri:(NSString *)uri method:(NSString *)method staus:(NSInteger)status withFileDataPath:(NSString*)dataPath useDataFixture:(BOOL)useFixture withDownloadDuration:(NSTimeInterval)duration
++(void) registerUri:(NSString *)uri method:(NSString *)method status:(NSInteger)status withFileDataPath:(NSString*)dataPath useDataFixture:(BOOL)useFixture withDownloadDuration:(NSTimeInterval)duration
 {
     if (!method) return;
     
@@ -145,7 +145,7 @@ static FakeWebResponder *matchingResponder;
     responder.downloadDuration = duration;
     responder.useDataFixture = useFixture;
     
-    [self addResponserToURIMap:responder registerUri:uri method:method body:nil staus:status statusMessage:nil];
+    [self addResponserToURIMap:responder registerUri:uri method:method body:nil status:status statusMessage:nil];
     [responder release];
 }
 
@@ -332,7 +332,7 @@ static FakeWebResponder *matchingResponder;
 }
 
 
-+ (void)addResponserToURIMap:(FakeWebResponder*)responder registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage
++ (void)addResponserToURIMap:(FakeWebResponder*)responder registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body status:(NSInteger)status statusMessage:(NSString *)statusMessage
 {
     NSArray *methods = [FakeWeb convertToMethodList:method];
     for (NSString *method_ in methods)

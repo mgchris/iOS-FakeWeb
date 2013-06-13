@@ -182,7 +182,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
             
             it(@"error when Synchronous", ^{
                 NSError* error = [NSError errorWithDomain:@"This error is part of the test" code:500 userInfo:nil];
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" body:@"Error Test" staus:500 statusMessage:nil withError:error withResponseDelay:0.3];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" body:@"Error Test" status:500 statusMessage:nil withError:error withResponseDelay:0.3];
                 
                 ASIHTTPRequest *request;
                 request = [ASIHTTPRequest requestWithURL:url];
@@ -196,7 +196,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
             });
             
             it(@"return data", ^{
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" status:200 withResponseDelay:0.3 withFileDataPath:filePath];
                 
                 ASIHTTPRequest *request;
                 request = [ASIHTTPRequest requestWithURL:url];
@@ -206,7 +206,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
             });
             
             it(@"return data", ^{
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" status:200 withResponseDelay:0.3 withFileDataPath:filePath];
                 
                 ASIHTTPRequest *request;
                 request = [ASIHTTPRequest requestWithURL:url];
@@ -217,7 +217,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
             
             it(@"finish callback", ^{
                 
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" status:200 withResponseDelay:0.3 withFileDataPath:filePath];
                 
                 AsyncTestObject* handler = [[[AsyncTestObject alloc] init] autorelease];
                 
@@ -236,7 +236,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
             
             it(@"fail callback", ^{
                 NSError* error = [NSError errorWithDomain:@"Error when testing callback" code:500 userInfo:nil];
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" body:nil staus:404 statusMessage:nil withError:error withResponseDelay:0.3];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" body:nil status:404 statusMessage:nil withError:error withResponseDelay:0.3];
                 
                 AsyncTestObject* handler = [[[AsyncTestObject alloc] init] autorelease];
                 ASIHTTPRequest *request;
@@ -255,7 +255,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
             
             it(@"completion block", ^{
                 
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" status:200 withResponseDelay:0.3 withFileDataPath:filePath];
                 
                 AsyncTestObject* tester = [AsyncTestObject mock];
                 
@@ -272,7 +272,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
             
             it(@"change registerURI after setting it", ^{
                 
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withResponseDelay:0.3 withFileDataPath:filePath];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" status:200 withResponseDelay:0.3 withFileDataPath:filePath];
                 AsyncTestObject* sucessfulHandler = [[[AsyncTestObject alloc] init] autorelease];
                 
                 ASIHTTPRequest *sucessfulRequest;
@@ -288,7 +288,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
                 [[sucessfulHandler.callbackRequest should] equal:sucessfulRequest];
                 [[theValue( sucessfulHandler.callbackRequest.responseStatusCode ) should] equal:theValue(200)];
                 
-                [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:500 withResponseDelay:0.3 withFileDataPath:filePath];
+                [FakeWeb registerUri:[url absoluteString] method:@"GET" status:500 withResponseDelay:0.3 withFileDataPath:filePath];
                 AsyncTestObject* failedHandler = [[[AsyncTestObject alloc] init] autorelease];
                 
                 ASIHTTPRequest *failedRequest;
@@ -318,7 +318,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
                 });
                 
                 it(@"Progressive download", ^{
-                    [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withFileDataPath:filePath useDataFixture:YES withDownloadDuration:3.0];
+                    [FakeWeb registerUri:[url absoluteString] method:@"GET" status:200 withFileDataPath:filePath useDataFixture:YES withDownloadDuration:3.0];
                     
                     [request setDownloadProgressDelegate:tester];
                     
@@ -331,7 +331,7 @@ describe(@"ASIHTTPRequest+FakeWeb", ^{
                 });
                 
                 it(@"write to path", ^{
-                    [FakeWeb registerUri:[url absoluteString] method:@"GET" staus:200 withFileDataPath:filePath useDataFixture:YES withDownloadDuration:1.0];
+                    [FakeWeb registerUri:[url absoluteString] method:@"GET" status:200 withFileDataPath:filePath useDataFixture:YES withDownloadDuration:1.0];
                     
                     NSString* outFile = [NSString stringWithFormat:@"%@outFile.txt", downloadPath];
 

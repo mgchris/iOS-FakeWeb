@@ -29,26 +29,26 @@
 /*!
  *  Wanted to have a error that gets passed
  */
-+(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage withError:(NSError*)error withResponseDelay:(NSTimeInterval)delay;
++(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body status:(NSInteger)status statusMessage:(NSString *)statusMessage withError:(NSError*)error withResponseDelay:(NSTimeInterval)delay;
 
 
 //  These methods are used to register asynchronous responses.
 /*!
  *  @param delay The amount of time to wait before sending a response.
  */
-+(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body staus:(NSInteger)status statusMessage:(NSString *)statusMessage withResponseDelay:(NSTimeInterval)delay;
++(void) registerUri:(NSString *)uri method:(NSString *)method body:(NSString *)body status:(NSInteger)status statusMessage:(NSString *)statusMessage withResponseDelay:(NSTimeInterval)delay;
 
 /*!
  *  @param dataPath Is the file to return when the user request data from response.
  */
-+(void) registerUri:(NSString *)uri method:(NSString *)method staus:(NSInteger)status withResponseDelay:(NSTimeInterval)delay withFileDataPath:(NSString*)dataPath;
++(void) registerUri:(NSString *)uri method:(NSString *)method status:(NSInteger)status withResponseDelay:(NSTimeInterval)delay withFileDataPath:(NSString*)dataPath;
 
 /*!
  *  @param useFixture When this is yes the app will use the progress callbacks.
  *  @param duration The amount of time it should take for the download to complete.  If streaming is NO this field is ignored.
  *  @note When using this method it will allow the code to show progress for downloading.
  */
-+(void) registerUri:(NSString *)uri method:(NSString *)method staus:(NSInteger)status withFileDataPath:(NSString*)dataPath useDataFixture:(BOOL)useFixture withDownloadDuration:(NSTimeInterval)duration;
++(void) registerUri:(NSString *)uri method:(NSString *)method status:(NSInteger)status withFileDataPath:(NSString*)dataPath useDataFixture:(BOOL)useFixture withDownloadDuration:(NSTimeInterval)duration;
 
 
 #pragma mark -

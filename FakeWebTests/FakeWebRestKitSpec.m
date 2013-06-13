@@ -41,7 +41,7 @@ describe(@"FakeWebRestKit", ^{
     context(@"Asynchronous Calls", ^{
        
         it(@"with response delay", ^{
-            [FakeWeb registerUri:loginURL method:@"GET" body:loginFixture staus:200 statusMessage:nil withResponseDelay:1.0f];
+            [FakeWeb registerUri:loginURL method:@"GET" body:loginFixture status:200 statusMessage:nil withResponseDelay:1.0f];
             
             NSURL* url = [NSURL URLWithString:loginURL];
             RKRequest* request = [RKRequest requestWithURL:url];
@@ -54,7 +54,7 @@ describe(@"FakeWebRestKit", ^{
         });
         
         it(@"with file path", ^{
-            [FakeWeb registerUri:loginURL method:@"GET" staus:200 withResponseDelay:1.0f withFileDataPath:loginFixturePath];
+            [FakeWeb registerUri:loginURL method:@"GET" status:200 withResponseDelay:1.0f withFileDataPath:loginFixturePath];
             
             NSURL* url = [NSURL URLWithString:loginURL];
             RKRequest* request = [RKRequest requestWithURL:url];
@@ -67,7 +67,7 @@ describe(@"FakeWebRestKit", ^{
         
         it(@"with error", ^{
             NSError* error = [NSError errorWithDomain:@"UserErrorNotFound" code:500 userInfo:nil];
-            [FakeWeb registerUri:loginURL method:@"GET" body:nil staus:500 statusMessage:nil withError:error withResponseDelay:1.0];
+            [FakeWeb registerUri:loginURL method:@"GET" body:nil status:500 statusMessage:nil withError:error withResponseDelay:1.0];
             
             AsyncTestObject* tester = [[[AsyncTestObject alloc] init] autorelease];
             
@@ -84,7 +84,7 @@ describe(@"FakeWebRestKit", ^{
         it(@"with fixture", ^{
             [FakeWeb registerUri:loginURL
                           method:@"GET"
-                           staus:200
+                           status:200
                 withFileDataPath:loginFixturePath
                   useDataFixture:YES
             withDownloadDuration:1.0];
@@ -101,7 +101,7 @@ describe(@"FakeWebRestKit", ^{
         it(@"cancel request", ^{
             [FakeWeb registerUri:loginURL
                           method:@"GET"
-                           staus:200
+                           status:200
                 withFileDataPath:loginFixturePath
                   useDataFixture:YES
             withDownloadDuration:2.0];
@@ -127,7 +127,7 @@ describe(@"FakeWebRestKit", ^{
         it(@"Async sucessful", ^{
             [FakeWeb registerUri:loginURL
                           method:@"GET"
-                           staus:200
+                           status:200
                 withFileDataPath:loginFixturePath
                   useDataFixture:YES
             withDownloadDuration:0.5];
@@ -155,7 +155,7 @@ describe(@"FakeWebRestKit", ^{
         it(@"Async cancel a reqest", ^{
             [FakeWeb registerUri:loginURL
                           method:@"GET"
-                           staus:200
+                           status:200
                 withFileDataPath:loginFixturePath
                   useDataFixture:YES
             withDownloadDuration:1.0];
